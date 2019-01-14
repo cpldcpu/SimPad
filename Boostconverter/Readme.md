@@ -18,7 +18,7 @@ The lines of the programming interface of the MCU are directly connected to GPIO
 The programming voltage Vpp is generated with a simple boost converter that is controlled directly via periphery of the ATMega. See below for circuit and LTspice simulator. This concept was previously used in the Openprog PIC programmer. See [here](http://openprog.altervista.org/OP_eng.html#Regulator) for more details.
 
 Timer TC0 is used in fast PWM mode to generate a 62.5kHz square wave on the input of the switching transistor. The voltage across the load is divided with R1 and R3 and fed back into the ADC of the ATMega. Right now the voltage in the programmer is not controlled in a closed loop, therefore changes of the loading lead to a deviation of Vpp. To reduce the effect of load changes, a constant loading resistor was added.
-A 1N4148 silicon switching diode is used intentionally to reduce the standby voltage of the switching converter to below 5.0V. 
+A 1N4148 silicon switching diode with ~0.7V voltage drop is used intentionally to reduce the standby voltage of the switching converter to below 5.0V. 
 
 ## Open issues
 
