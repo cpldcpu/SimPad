@@ -1,0 +1,125 @@
+/*------------------------------------------------------------------------*/ /**
+\addtogroup doc_driver_adc_basic ADC Basic Driver
+ 
+\brief Driver for basic ADC functionality.
+
+The ADC Basic driver provides basic functionality for using the ADC. 
+The driver has the following features:
+- The driver provides only single shot, non-windowed operation of the ADC.
+- If the ADC hardware supports using multiple resolutions, 
+the conversion is done using the resolution specified by the user in START. 
+
+The ADC Basic driver has two modes of operation:
+- Polled mode
+- Interrupt mode
+
+
+\section doc_driver_adc_basic_polled Polled mode
+
+In the Polled Mode, the application code explicitly starts a conversion 
+on a specified channel, waits for the conversion to complete, and 
+reads back the result.
+
+
+\section doc_driver_adc_basic_interrupt Interrupt mode
+
+In the Interrupt Mode, the application code explicitly starts a conversion 
+on a specified channel. When the conversion is done, the ADC ISR is executed.
+The user can hookup a callback to this ISR, specifying any actions to be 
+performed by the ISR, such as reading the result, performing arithmetic on it,
+and storing it to a buffer. To generate code for including a callback handler,
+tick the "Include harness for IRQ on conversion complete"- box in START.
+
+
+\section doc_driver_adc_basic_functional Functional Description
+
+An ADC conversion is started by calling 
+<component_name>_start_conversion(adc_channel_t channel).
+A conversion will then be started in the ADC, and the result will be ready 
+after a number of clock cycles. The function 
+<component_name>_is_conversion_done() is used
+to poll if the result is ready. When the result is ready, it can be read
+using <component_name>_get_conversion_result(). The function 
+<component_name>_get_conversion(adc_channel_t channel) combines all these 
+operations into a single function: Start conversion, wait, and read result.
+
+ADC conversion results are returned as datatype adc_result_t, which 
+has 16 bits. The data is right-adjusted, and the number of bits used
+is dependent on the resolution of the ADC, or the chosen resolution if 
+the ADC supports multiple resolutions. The function 
+<component_name>_get_resolution() returns the number of bits in the 
+result, and can be used to adjust or scale the result if needed.
+
+
+\section doc_driver_adc_basic_hardware Hardware Dependencies
+
+The ADC Basic driver needs ADC hardware to perform conversions.
+When the user has selected a device and added an ADC component, 
+the Driver field in the Component Settings pane in START will 
+let the user select which timer driver to use, select *Drivers:ADC:Basic* 
+to use the ADC Basic driver.
+
+The Configuration Pane in START will display options that are 
+dependent on the hardware used to implement the ADC driver.
+For example, an option may allow changing the number of result bits 
+or clock prescaling used to drive the underlying ADC hardware.
+
+
+\section doc_driver_adc_basic_software Software Dependencies
+
+The ADC Basic may be configured to use use the interrupt functionality 
+of the underlying ADC. Make sure that global interrupts 
+are enabled (using sei()) and that the Interrupt Controller, if 
+present, is configured so that the ADC interrupt is serviced 
+correctly.
+
+
+\section doc_driver_adc_basic_code Code example
+
+\code
+#include <atmel_start.h>
+
+volatile bool isr_executed = false;
+volatile adc_result_t measurement;
+volatile uint8_t measurement_normalized;
+
+void adc_handler_cb(void){
+	measurement = ADC_0_get_conversion_result();
+	measurement_normalized = measurement>>(ADC_0_get_resolution()-8);
+	isr_executed = true;
+}
+
+
+int main(void)
+{
+	/* Initializes MCU, drivers and middleware */
+	atmel_start_init();
+
+	// Test polled mode
+
+	// Get conversion from ADC CH0
+	measurement = ADC_0_get_conversion(0);
+
+	// Get 8 MSB of conversion result
+	measurement_normalized = measurement>>(ADC_0_get_resolution()-8);
+
+	// Test IRQ mode
+
+	sei();
+
+	ADC_0_register_callback(adc_handler_cb);
+
+	// Start conversion from ADC CH0
+	ADC_0_start_conversion(0);
+
+	// Wait for ISR to be execued
+	while (!isr_executed);
+	
+	while (1);
+}
+\endcode
+
+
+*/
+
+

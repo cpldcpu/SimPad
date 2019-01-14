@@ -1,0 +1,166 @@
+format_version: '2'
+name: My Project
+versions:
+  api: '1.0'
+  backend: 1.4.93
+  commit: 9c29f8365cf76e9937d19b1e765a83bc7a80e4e9
+  content: 1.0.1303
+  content_pack_name: acme-packs-all
+  format: '2'
+  frontend: 1.4.1810
+board:
+  identifier: CustomBoard
+  device: ATmega168PA-AU
+details: null
+application: null
+middlewares: {}
+drivers:
+  CPU:
+    user_label: CPU
+    definition: 'Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega168PA-AU::CPU::driver_config_definition::SYSCTRL::Drivers:SYSCTRL:'
+    functionality: System
+    api: 'Drivers:SYSCTRL:'
+    configuration:
+      async_input_speed: 32768
+      clkadc_oscillator: Input clock
+      clkasy_oscillator: Async input clock
+      clkcpu_oscillator: Input clock
+      clkio_oscillator: Input clock
+      clkptc_oscillator: Input clock
+      cpu_clock_source: CLKcpu
+      cpu_sreg_i: false
+      enable_async_input: true
+      enable_clkadc: true
+      enable_clkasy: true
+      enable_clkcpu: true
+      enable_clkio: true
+      enable_clkptc: true
+      enable_core_clock: true
+      enable_input: true
+      input_speed: 16000000
+      pm_ivsel: Interrupt vector placed at the beginning of main FLASH memory
+      pm_pud: false
+      pm_se: false
+      pm_sm: Idle
+      prescaler_divider: '1'
+    optional_signals: []
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: Core
+          input: Core
+        configuration: {}
+  ADC_0:
+    user_label: ADC_0
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega168PA-AU::ADC::driver_config_definition::ADC.Basic::Drivers:ADC:Basic
+    functionality: ADC
+    api: Drivers:ADC:Basic
+    configuration:
+      adcsra_adate: false
+      adcsra_aden: true
+      adcsra_adie: false
+      adcsra_adps: '16'
+      adcsrb_acme: false
+      adcsrb_adts: Free Running mode
+      admux_adlar: false
+      admux_mux: ADC Single Ended Input pin 6
+      admux_refs: AVCC with external capacitor at AREF pin
+    optional_signals: []
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: ADC
+          input: CLKadc
+        configuration:
+          adc_clock_source: CLKadc
+  PWM_0:
+    user_label: PWM_0
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega168PA-AU::TC0::driver_config_definition::TC8.Mode.3.Fast.PWM::Drivers:PWM:Basic
+    functionality: PWM
+    api: Drivers:PWM:Basic
+    configuration:
+      callback_rate: 0
+      inc_overflow_irq: true
+      pwm_top: '0xff'
+      tc8_coma: Clear OCA on Compare Match, set OCA on BOTTOM (non-inverting mode)
+      tc8_comb: Normal port operation, OCB disconnected
+      tc8_cs: No prescaling
+      tc8_ociea: false
+      tc8_ocieb: false
+      tc8_ocra: 16
+      tc8_ocrb: 0
+      tc8_toie: false
+    optional_signals:
+    - identifier: PWM_0:OCA
+      pad: PD6
+      mode: Enabled
+      configuration: null
+      definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega168PA-AU::optional_signal_definition::TC0.OCA
+      name: TC0/OCA
+      label: OCA
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: TC8
+          input: CLKio
+        configuration:
+          tc8_clock_source: CLKio
+  USART_0:
+    user_label: USART_0
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega168PA-AU::USART0::driver_config_definition::Async.Polled.Mode::Drivers:USART:Basic
+    functionality: USART
+    api: Drivers:USART:Basic
+    configuration:
+      printf_support: true
+      usart_baud_rate: 115200
+      usart_mpcm: false
+      usart_rxcie: true
+      usart_rxen: true
+      usart_txen: true
+      usart_ucpha: Sample data on the first edge of XCK
+      usart_ucpol: false
+      usart_ucsz: 8-bit
+      usart_udord: MSB is transmitted first
+      usart_udrie: false
+      usart_upm: Disabled
+      usart_usbs: 1-bit
+    optional_signals: []
+    variant:
+      specification: UMSEL=0
+      required_signals:
+      - name: USART0/RXD
+        pad: PD0
+        label: RXD
+      - name: USART0/TXD
+        pad: PD1
+        label: TXD
+    clocks:
+      domain_group:
+        nodes:
+        - name: USART
+          input: CLKio
+        configuration:
+          usart_clock_source: CLKio
+pads:
+  PD6:
+    name: PD6
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega168PA-AU::pad::PD6
+    mode: Digital output
+    user_label: PD6
+    configuration: null
+  PD0:
+    name: PD0
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega168PA-AU::pad::PD0
+    mode: Digital input
+    user_label: PD0
+    configuration: null
+  PD1:
+    name: PD1
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega168PA-AU::pad::PD1
+    mode: Digital output
+    user_label: PD1
+    configuration: null
+toolchain_options: []

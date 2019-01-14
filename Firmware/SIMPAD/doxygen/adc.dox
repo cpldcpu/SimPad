@@ -1,0 +1,73 @@
+/*------------------------------------------------------------------------*/ /**
+\defgroup doc_driver_adc ADC Drivers
+
+The ADC (Analog to Digital Converter) is a peripheral that converts an 
+analog voltage to digital value.
+
+
+The following driver variants are available:
+
+- \ref doc_driver_adc_init : Init driver initializing the ADC hardware as 
+specified by the user in START.
+
+- \ref doc_driver_adc_basic : Provides basic functionality like:
+  - Initializing the ADC as specified by the user in START
+  - Starting a conversion on a specified channel
+  - Polling whether a conversion is done
+  - Getting the conversion result
+  - Polled or interrupt-driven interfaces, selectable from START
+
+- \ref doc_driver_adc_window : Provides advanced functionality like:
+  - Initializing the ADC as specified by the user in START
+  - Starting auto-triggered conversions on a specified channel
+  - Let conversions be triggered by the event system
+  - Getting interrupts if the conversion is inside/outside a specified window range
+  - Getting the conversion result
+
+
+\section doc_driver_adc_basic_and_practice ADC Basics and Best Practice
+
+An ADC (Analog-to-Digital Converter) converts analog signals to digital values.
+A reference signal with a known voltage level is quantified into equally
+sized chunks, each representing a digital value from 0 to the highest number
+possible with the bit resolution supported by the ADC. The input voltage
+measured by the ADC is compared against these chunks and the chunk with the
+closest voltage level defines the digital value that can be used to represent
+the analog input voltage level.
+
+Usually an ADC can operate in either differential or single-ended mode.
+In differential mode two signals (V+ and V-) are compared against each other
+and the resulting digital value represents the relative voltage level between
+V+ and V-. This means that if the input voltage level on V+ is lower than on
+V- the digital value is negative, which also means that in differential
+mode one bit is lost to the sign. In single-ended mode only V+ is compared
+against the reference voltage, and the resulting digital value only can be
+positive, but the full bit-range of the ADC can be used.
+
+Usually multiple resolutions are supported by the ADC, lower resolution can
+reduce the conversion time, but lose accuracy.
+
+Some ADCs have a gain stage on the input lines which can be used to increase 
+the dynamic range. The default gain value is usually x1, which means that the
+conversion range is from 0V to the reference voltage.
+Applications can change the gain stage, to increase or reduce the conversion
+range.
+
+Usually multiple reference voltages are supported by the ADC, both internal and
+external with difference voltage levels. The reference voltage have an impact
+on the accuracy, and should be selected to cover the full range of the analog
+input signal and never less than the expected maximum input voltage.
+
+Some ADCs have a window mode allowing the conversion result to be automatically 
+compared to a set of predefined threshold values. Applications can use callback 
+function to monitor if the conversion result exceeds predefined threshold value.
+
+ADCs typically provide two conversion modes: Single shot and 
+free running. In single shot mode the ADC only performs a conversion when 
+triggered by the application. In free running mode it continues to make 
+conversions from it is triggered until it is stopped by the application. When
+in window monitoring mode, the ADC should be set to free running mode.
+
+*/
+
+
