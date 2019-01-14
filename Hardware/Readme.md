@@ -1,8 +1,10 @@
 # Hardware
 
-The experimental programmer hardware is based on an Arduino Nano with a ATMega168PA. This represents an absolute minimum in hardware necessary and is not representative of a production worthy programmer.
+The experimental programmer hardware is based on an Arduino Nano with a ATMega168PA. 
 
 The lines of the programming interface of the MCU are directly connected to GPIOs as shown below. Also VDD is controlled by a GPIO. Maximum load on VDD is 20mA according to the PMS150C datasheet, which can be easily sourced from the ATMega. Vpp is generated with a simple boost converter.
+
+This is a minimal implementation and is not representative of a production worthy programmer.
 
 	     6-wire    5-wire
 	PWM = VPP     = ICVPP
@@ -25,6 +27,6 @@ A 1N4148 silicon switching diode with ~0.7V voltage drop is used intentionally t
  - To properly implement the programming sequence, including corner case verification, it is also necessary to control the voltage of VDD. This requires additional hardware.
  - Control of VPP is somewhat instable. This could be improved with a closed loop converter or a dedicated boost converter IC.
 
-![Circuit](https://github.com/cpldcpu/SimPad/blob/master/Boostconverter/booster%20circuit.gif)
-![Simulation](https://github.com/cpldcpu/SimPad/blob/master/Boostconverter/booster_transient.gif)
+![Circuit](https://github.com/cpldcpu/SimPad/blob/master/Hardware/booster%20circuit.gif)
+![Simulation](https://github.com/cpldcpu/SimPad/blob/master/Hardware/booster_transient.gif)
 ![Breadboard](https://github.com/cpldcpu/SimPad/blob/master/hardware.jpg)
