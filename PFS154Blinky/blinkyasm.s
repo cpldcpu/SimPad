@@ -5,6 +5,32 @@
 ; File Created by SDCC : free open source ANSI-C Compiler
 ; Version 3.8.6 #10883 (Linux)
 ;--------------------------------------------------------
+; Equivalent C-code in comment below
+;--------------------------------------------------------
+;
+; volatile int counter;
+;
+; __sfr __at(0x03) clkmd;
+; __sfr __at(0x10) pa;
+; __sfr __at(0x11) pac;
+;
+; void main(void)
+; {
+; 	clkmd = 0x78; // Disable ILRC, watchdog, clock= IHRC/64
+; 	pac = 0x01;	// PA.0=output
+;	
+; 	for (;;) {
+; 		counter=30000;
+; 		while (--counter);
+; 		pa=0x00;
+;
+; 		counter=30000;
+; 		while (--counter);
+; 		pa=0x01;
+; 	}
+; }
+;--------------------------------------------------------
+
 	.module blinky
 	.optsdcc -mpdk14
 	
