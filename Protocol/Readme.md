@@ -5,4 +5,4 @@ The pdf file in this folder contains an analysis of datalogs of the programming 
 
 The purpose of this analysis is to allow a [clean-room implemention](https://en.wikipedia.org/wiki/Clean_room_design) of the Padauk programming protocol based on behavioral analysis, without having to revert to software reverse engineering. 
 
-Another, prior, analysis of the PFS154 protocol by "js_12345678_55aa" and @socram8888 can be found [here](http://www.eevblog.com/forum/blog/eevblog-1144-padauk-programmer-reverse-engineering/msg2047933/#msg2047933) and following.
+Another, prior, analysis of the PFS154 protocol by "js_12345678_55aa", @socram8888 and others can be found [here](http://www.eevblog.com/forum/blog/eevblog-1144-padauk-programmer-reverse-engineering/msg2047933/#msg2047933) and following.
