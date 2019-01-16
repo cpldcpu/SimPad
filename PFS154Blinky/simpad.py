@@ -17,11 +17,6 @@ for cursegment in ih.segments():
     start=cursegment[0]/2       # convert address index from byte to word
     stop =cursegment[1]/2 
 
-    for currentaddress in range(start,stop): # Convert adresses of goto from byte to word
-        dat16bit=ih[currentaddress]
-        if (dat16bit&0xf000==0x3000):   
-            ih[currentaddress]=0x3000+((dat16bit&0x7ff)/2)
-
     for currentaddress in range(start,stop,2):
         dat16bitl=ih[currentaddress]
         dat16bith=ih[currentaddress+1]
