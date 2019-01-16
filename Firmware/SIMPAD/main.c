@@ -134,6 +134,7 @@ void SP_RampVpp(uint16_t adctarget) {
 		cur_dutycycle +=1;
 		PWM_0_load_duty_cycle_ch0(cur_dutycycle);
 		_delay_ms(5);
+		adcout = ADC_0_get_conversion(6);
 		if (cur_dutycycle==255) {
 			PWM_0_load_duty_cycle_ch0(0);
 			printf("VPP RAMP OVERFLOW (last Vpp:%i but target was:%i)!!\n",adcout,adctarget);
@@ -475,6 +476,5 @@ int main(void)
 	printf("Vpp after writing: %.1f V\n",(float)adcout*0.01427f);
 	
 	SP_StartMCU();
-
 	while(1);
 }
