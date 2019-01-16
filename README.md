@@ -1,4 +1,23 @@
 # SimPad
-Work towards an open source programmer for Padauk MCUs
+Various hacks for Padauk MCU, the infamous "0.03USD" microcontroller. This is work in progress, don't expect anything to be functional or useful.
 
-![Image of breadboard](https://github.com/cpldcpu/SimPad/blob/master/hardware.jpg)
+## Folders
+
+### [Hardware](Hardware/)
+
+Programmer for Padauk MCU based on Arduino Nano, currently living on a breadbord. See folder for a description of shortcomings.
+
+### [Firmware](Firmware/)
+
+Firmware, very incomplete work in progress. Is currently able to program PMS150C, PFC154, PFS154C. Right now, no host communication is implemented and the binary needs to be pasted into the source. Debug output is sent to serial output at 115200 baud. Will program a "blinky" into PFS154C in the current configuration. 
+
+### [Protocol](Protcol/)
+
+Information on programming protocol
+
+### [PFS154Blinky](PFS154Blinky/)
+
+Blinky-project, to be compiled with SDCC.
+
+
+![Image of breadboard](hardware.jpg)
