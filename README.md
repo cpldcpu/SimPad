@@ -11,7 +11,7 @@ Programmer for Padauk MCU based on Arduino Nano, currently living on a breadbord
 
 Firmware, very incomplete work in progress. Is currently able to program PMS150C, PFC154, PFS154C. Right now, no host communication is implemented and the binary needs to be pasted into the source. Debug output is sent to serial output at 115200 baud. Will program a "blinky" into PFS154C in the current configuration. 
 
-### [Protocol](Protcol/)
+### [Protocol](Protocol/)
 
 Information on programming protocol
 
