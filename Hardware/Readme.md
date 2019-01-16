@@ -17,7 +17,7 @@ This is a minimal hardware implementation and is not representative of a product
 
 ## Boost converter to control Vpp
 
-The programming voltage Vpp is generated with a simple boost converter that is controlled directly by the periphery of the ATMega. The circuit and a LTspice simulation is shown in the images below. This concept was previously used in the Openprog PIC programmer. See [here](http://openprog.altervista.org/OP_eng.html#Regulator) for more details.
+The programming voltage Vpp is generated with a simple boost converter that is controlled directly by the periphery of the ATMega. The circuit and a LTspice simulation is shown in the images below. This concept was previously used in the Openprog PIC programmer and is also used in the official PICkit by Microchip. See [here](http://openprog.altervista.org/OP_eng.html#Regulator) for more details.
 
 Timer TC0 is used in fast PWM mode to generate a 62.5 kHz square wave on the input of the switching transistor. The duty cycle of the PWM signal is varied to modify swithing. The voltage across the load is divided with R1 and R3 and fed back into the ADC of the ATMega. Right now the voltage in the programmer is not controlled in a closed loop, therefore changes of the load lead to a deviation of Vpp. To reduce the impact of varying load, a constant loading resistor was added. This may be merged with the voltage divider.
 A 1N4148 silicon diode with ~0.7 Vf drop is used intentionally to reduce the standby voltage of the switching converter to below 5.0 V. 
