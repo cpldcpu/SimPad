@@ -1,9 +1,7 @@
-import serial
-import time
 from intelhex import IntelHex16bit
 
 # Very hacky tool to convert ihx from SDCC-PDK14 to a C include
-# Corrects adresses of GOTO instruction.
+
 
 # install missing libraries:
 # 	pip install pyserial
@@ -14,8 +12,8 @@ ih.fromfile('main.ihx',format='hex')
 # ih.dump()
 
 for cursegment in ih.segments():
-    start=cursegment[0]/2       # convert address index from byte to word
-    stop =cursegment[1]/2 
+    start=cursegment[0]>>1       # convert address index from byte to word
+    stop =cursegment[1]>>1 
 
     for currentaddress in range(start,stop,2):
         dat16bitl=ih[currentaddress]

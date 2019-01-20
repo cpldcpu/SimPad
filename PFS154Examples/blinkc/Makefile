@@ -13,6 +13,8 @@ TARGET=main.ihx
 ASFLAGS=-lo
 LDFLAGS=-mpdk14 -lpdk14 --out-fmt-ihx
 CFLAGS = 
+SPCONV= python3 ../simpad_conv.py
+SPDISAS= python3 ../simpad_disasm.py
 
 SRCS    := $(wildcard *.c $(LIBDIR)/*.c)
 ASRCS   := $(wildcard *.s $(LIBDIR)/*.s)
@@ -37,10 +39,9 @@ size:
 	@stat -L -c %s $(TARGET).bin
 
 cinclude: 
-	python simpad.py >$(TARGET).h_txt
-
+	$(SPCONV) #>$(TARGET).h_txt
 disasm:
-	python simpaddisasm.py >disasm.asm
+	$(SPDISAS)
 
 clean:
 	rm -f $(OBJECTS) *.map *.asm *.rel *.ihx *.o *.sym *.lk *.lst *.rst *.cdb *.bin *.h_txt *.mem
