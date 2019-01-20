@@ -94,9 +94,8 @@ void SP_init(void) {
 	if (device_phy==fivewire) {
 		PORTB_set_pin_dir(P_ICPDA,PORT_DIR_IN);
 		PORTB_set_pin_level(P_ICPDA,false);
-		PORTB_set_pin_dir(P_MOSI,PORT_DIR_IN);
-		
-		} else 	{
+		PORTB_set_pin_dir(P_MOSI,PORT_DIR_IN);		
+	} else 	{
 		PORTB_set_pin_dir(P_MISO,PORT_DIR_IN);
 		PORTB_set_pin_dir(P_MOSI,PORT_DIR_OUT);
 		PORTB_set_pin_level(P_MOSI,false);
@@ -167,7 +166,7 @@ void SP_SendWord(uint16_t word, uint8_t length) {
 		}
 		PORTB_set_pin_level(P_ICPCK,false);
 		PORTB_set_pin_dir(P_ICPDA,PORT_DIR_IN);
-		} else {
+	} else {
 		for (i=0; i<length; i++) {
 			PORTB_set_pin_level(P_SCLK,false);
 			PORTB_set_pin_level(P_MOSI,word&0x8000);
@@ -206,7 +205,7 @@ uint16_t SP_ReceiveWord(uint8_t length) {
 		_delay_us(2);
 		PORTB_set_pin_level(P_ICPCK,false);
 		_delay_us(2);
-		} else {
+	} else {
 		for (i=0; i<length; i++) {
 			PORTB_set_pin_level(P_SCLK,false);
 			_delay_us(3);
@@ -278,7 +277,7 @@ void SP_WriteWords(uint16_t word1,uint16_t word2, uint16_t address) {
 			SP_SendWord(0xffff,device_datalen);
 			SP_SendWord(word1,device_datalen);
 			SP_SendWord(word2,device_datalen);
-			} else {
+		} else {
 			SP_SendWord(word1,device_datalen);
 			SP_SendWord(word2,device_datalen);
 			SP_SendWord(0x0ffff,device_datalen);
@@ -394,11 +393,55 @@ void SP_StartMCU(void) {
 	adcout = ADC_0_get_conversion(6);
 	printf("Vpp before starting MCU: %.1f V\n",(float)adcout*0.01427f);
 
+	PORTB_set_pin_dir(P_MISO,PORT_DIR_IN);	  // all connections to input
+	PORTB_set_pin_dir(P_MOSI,PORT_DIR_IN);
+	PORTB_set_pin_dir(P_SCLK,PORT_DIR_IN);
+
 	PORTB_set_pin_dir(P_VDD,PORT_DIR_OUT);	  // turn on VDD
 	PORTB_set_pin_level(P_VDD,false);		  // reset
 	_delay_us(500);
 	PORTB_set_pin_level(P_VDD,true);	  //
 	printf("MCU is active now.\n");
+}
+
+/*
+	Receive and transmit SPI from programming interface.
+	ICPCK and ICPDA are CLK and MOSI, respecively. The programmer is SPI slave
+*/
+
+void SPIMonitor(void) {
+	uint16_t shiftreg=0;
+	uint8_t  bitcount=0;
+	uint16_t timeout=0x10000;
+	bool	 lastclk=true;
+
+	PORTB_set_pin_dir(P_ICPDA,PORT_DIR_IN);	  // all connections to input
+	PORTB_set_pin_dir(P_ICPCK,PORT_DIR_IN);
+
+	
+	while(1) {
+		bool newclk=PORTB_get_pin_level(P_ICPCK);
+		
+		if (newclk&&!lastclk) {  // rising edge detected
+			shiftreg=(shiftreg<<1)|(PORTB_get_pin_level(P_ICPDA)&1);
+			bitcount++;
+			timeout=0xffff;
+			
+			if (bitcount==16) {
+				printf("%u\n",shiftreg);
+				bitcount=0;
+				shiftreg=0;						
+			}
+		}
+							
+		if (!timeout--) {
+			timeout=0xffff;
+			bitcount=0;
+			shiftreg=0;			
+		}				
+		
+		lastclk=newclk;		
+	}	
 }
 
 int main(void)
@@ -454,27 +497,44 @@ int main(void)
 	adcout = ADC_0_get_conversion(6);
 	printf("Vpp write mode: %.1f V\tPWM: %i\n",(float)adcout*0.01427f,cur_dutycycle);
 
-	// Blinky on PA.0 for PFS154
-	SP_WriteWords(0x3008,0xFFFF,0x0000);
-	SP_WriteWords(0x2F78,0x0183,0x0008);
-	SP_WriteWords(0x2F01,0x0191,0x000A);
-	SP_WriteWords(0x2F30,0x0B80,0x000C);
-	SP_WriteWords(0x2F75,0x0B81,0x000E);
-	SP_WriteWords(0x1280,0x1081,0x0010);
-	SP_WriteWords(0x0F80,0x0E81,0x0012);
-	SP_WriteWords(0x2A00,0x3010,0x0014);
-	SP_WriteWords(0x2F00,0x0190,0x0016);
-	SP_WriteWords(0x2F30,0x0B80,0x0018);
-	SP_WriteWords(0x2F75,0x0B81,0x001A);
-	SP_WriteWords(0x1280,0x1081,0x001C);
-	SP_WriteWords(0x0F80,0x0E81,0x001E);
-	SP_WriteWords(0x2A00,0x301C,0x0020);
-	SP_WriteWords(0x2F01,0x0190,0x0022);
-	SP_WriteWords(0x300C,0x007A,0x0024);
+	// led candle on PA.0 for PFS154
+	SP_WriteWords(0x2F04,0x0182,0x0000);
+	SP_WriteWords(0x2F38,0x0183,0x0002);
+	SP_WriteWords(0x3812,0x1F11,0x0004);
+	SP_WriteWords(0x1D10,0x380A,0x0006);
+	SP_WriteWords(0x381C,0x3007,0x0008);
+	SP_WriteWords(0x2F5F,0x0B80,0x000A);
+	SP_WriteWords(0x0B81,0x1180,0x000C);
+	SP_WriteWords(0x300D,0x1181,0x000E);
+	SP_WriteWords(0x300D,0x007A,0x0010);
+	SP_WriteWords(0x2F87,0x01A0,0x0012);
+	SP_WriteWords(0x2F20,0x01A1,0x0014);
+	SP_WriteWords(0x2FFF,0x01A5,0x0016);
+	SP_WriteWords(0x01A4,0x2F01,0x0018);
+	SP_WriteWords(0x0B82,0x007A,0x001A);
+	SP_WriteWords(0x0F82,0x2003,0x001C);
+	SP_WriteWords(0x2DFF,0x01A2,0x001E);
+	SP_WriteWords(0x01C3,0x0B80,0x0020);
+	SP_WriteWords(0x3829,0x0F82,0x0022);
+	SP_WriteWords(0x2980,0x1A40,0x0024);
+	SP_WriteWords(0x007A,0x1180,0x0026);
+	SP_WriteWords(0x3022,0x2FCA,0x0028);
+	SP_WriteWords(0x1503,0x1602,0x002A);
+	SP_WriteWords(0x1840,0x0B03,0x002C);
+	SP_WriteWords(0x007A,0xFFFF,0x002E);
+
+
+
+
+
+
+
 	
 	adcout = ADC_0_get_conversion(6);
 	printf("Vpp after writing: %.1f V\n",(float)adcout*0.01427f);
 	
 	SP_StartMCU();
+	
+	SPIMonitor();
 	while(1);
 }
