@@ -122,7 +122,7 @@ candle_do:
 	call	lfsr_step
 	mov		a, _random
 	sub     a, #128			;	Changing this to lower value will increase flicker
-	t1sn	_flag,#1	  
+	t1sn	f,c	  
 	ret
 	dzsn	_counter
 	goto	.repeatrnd
@@ -147,6 +147,6 @@ lfsr_step:
 	mov		a, #0xca		; Load feedback term into accu. 
 	sr		_random+1	  	; shift random value right, bit0 goes into carry
 	src		_random
-	t0sn	_flag,#1		; Skip next instrcution if carry is clear
+	t0sn	f,c				; Skip next instrcution if carry is clear
 	xor		_random+1,a	   	; xor with feedback term
 	ret
