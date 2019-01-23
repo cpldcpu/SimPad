@@ -50,7 +50,7 @@ __start__stack:
 ;--------------------------------------------------------
 	.area HOME
 	.area PREG (ABS)
-	.org 0xc0
+	.org 0x00
 
 _main:
 	mov		a,#(d_end-d_begin+1)&254	; initialize stack pointer to end of data area
