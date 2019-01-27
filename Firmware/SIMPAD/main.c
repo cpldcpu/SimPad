@@ -38,20 +38,20 @@
 static uint8_t cur_dutycycle=0;
 
 typedef enum {fivewire, sixwire,eightwire} physical_interface;
-/*
+
 // PMS150C
 static const physical_interface device_phy=sixwire;
 static const uint8_t device_datalen=13;
 static const uint8_t device_adrlen=12;
 static const uint16_t device_vpp_read=(uint16_t)(70.7*7.5);  // 7.5 V
-static const uint16_t device_vpp_write=(uint16_t)(70.7*11);  // 11 V
+static const uint16_t device_vpp_write=(uint16_t)(70.7*10.5);  // 11 V
+static const uint16_t device_vpp_erase=(uint16_t)(70.7*8.0);  // 8.0 V
 static const uint16_t device_memend=0x3ff;
 static const uint16_t device_id=0xa16;
 static const char device_string[]="PMS150C";
-*/
 
+/*
 // PFC154
-
 static const physical_interface device_phy=fivewire;
 static const uint8_t device_datalen=14;
 static const uint8_t device_adrlen=13;
@@ -61,8 +61,8 @@ static const uint16_t device_vpp_erase=(uint16_t)(70.7*8.0);  // 8.0 V
 static const uint16_t device_memend=0x7ff;
 static const uint16_t device_id=0xaa1;
 static const char device_string[]="PFS154";
-
 /*
+
 // PMS154C
 static const physical_interface device_phy=sixwire;
 static const uint8_t device_datalen=14;
@@ -304,7 +304,25 @@ void SP_WriteWords(uint16_t word1,uint16_t word2, uint16_t address) {
 		SP_SendWord(0,1);  // Trailing zero
 		
 		} else {
-		SP_SendWord(word1,device_datalen);
+		SP_SendWord(word1,device_datalen);			// Write two words in consecutive steps to improve reliability
+		SP_SendWord(0xffff,device_datalen);
+		SP_SendWord(address,device_adrlen);
+
+		// Write execution sequence (stretched SCLK cycle and slow clock on MOSI)
+		SP_SendWord(0,1);  // Leading zero
+		PORTB_set_pin_level(P_SCLK,true);
+		_delay_us(1);
+		for (uint8_t i=0; i<8; i++) {
+			PORTB_set_pin_level(P_MOSI,true);
+			_delay_us(31);
+			PORTB_set_pin_level(P_MOSI,false);
+			_delay_us(31);
+		}
+		PORTB_set_pin_level(P_SCLK,false);
+		_delay_us(1);
+		SP_SendWord(0,1);  // Trailing zero
+
+		SP_SendWord(0xffff,device_datalen);
 		SP_SendWord(word2,device_datalen);
 		SP_SendWord(address,device_adrlen);
 
@@ -321,6 +339,7 @@ void SP_WriteWords(uint16_t word1,uint16_t word2, uint16_t address) {
 		PORTB_set_pin_level(P_SCLK,false);
 		_delay_us(1);
 		SP_SendWord(0,1);  // Trailing zero
+
 	}
 }
 
@@ -483,10 +502,10 @@ int main(void)
 	}
 	SP_init();
 	_delay_ms(20);
-
+/*
 	printf("Erasing device...\n");
 	SP_EraseDevice();
-	
+	*/
 	printf("Writing to memory...\n");
 	SP_EnterPGMmode(0xA7);  // Enter write mode
 
@@ -497,44 +516,30 @@ int main(void)
 	adcout = ADC_0_get_conversion(6);
 	printf("Vpp write mode: %.1f V\tPWM: %i\n",(float)adcout*0.01427f,cur_dutycycle);
 
-	// led candle on PA.0 for PFS154
-	SP_WriteWords(0x2F04,0x0182,0x0000);
-	SP_WriteWords(0x2F38,0x0183,0x0002);
-	SP_WriteWords(0x3812,0x1F11,0x0004);
-	SP_WriteWords(0x1D10,0x380A,0x0006);
-	SP_WriteWords(0x381C,0x3007,0x0008);
-	SP_WriteWords(0x2F5F,0x0B80,0x000A);
-	SP_WriteWords(0x0B81,0x1180,0x000C);
-	SP_WriteWords(0x300D,0x1181,0x000E);
-	SP_WriteWords(0x300D,0x007A,0x0010);
-	SP_WriteWords(0x2F87,0x01A0,0x0012);
-	SP_WriteWords(0x2F20,0x01A1,0x0014);
-	SP_WriteWords(0x2FFF,0x01A5,0x0016);
-	SP_WriteWords(0x01A4,0x2F01,0x0018);
-	SP_WriteWords(0x0B82,0x007A,0x001A);
-	SP_WriteWords(0x0F82,0x2003,0x001C);
-	SP_WriteWords(0x2DFF,0x01A2,0x001E);
-	SP_WriteWords(0x01C3,0x0B80,0x0020);
-	SP_WriteWords(0x3829,0x0F82,0x0022);
-	SP_WriteWords(0x2980,0x1A40,0x0024);
-	SP_WriteWords(0x007A,0x1180,0x0026);
-	SP_WriteWords(0x3022,0x2FCA,0x0028);
-	SP_WriteWords(0x1503,0x1602,0x002A);
-	SP_WriteWords(0x1840,0x0B03,0x002C);
-	SP_WriteWords(0x007A,0xFFFF,0x002E);
+	// led candle on PA.3 for PFS150c
+	SP_WriteWords(0x1702,0x0082,0x0000);
+	SP_WriteWords(0x1778,0x0083,0x0002);
+	SP_WriteWords(0x1701,0x0091,0x0004);
+	SP_WriteWords(0x0F10,0x1C0B,0x0006);
+	SP_WriteWords(0x0E10,0x1C0B,0x0008);
+	SP_WriteWords(0x1806,0x17FF,0x000A);
+	SP_WriteWords(0x05C0,0x05C1,0x000C);
+	SP_WriteWords(0x08C0,0x180E,0x000E);
+	SP_WriteWords(0x08C1,0x180E,0x0010);
+	SP_WriteWords(0x003A,0xFFFF,0x0012);
 
-
-
-
-
-
-
+/*
+	for (uint8_t i=0; i<0x60; i+=2) {
+		SP_WriteWords(0x0000,0x0000,i);
+		
+	}
+*/
 	
 	adcout = ADC_0_get_conversion(6);
 	printf("Vpp after writing: %.1f V\n",(float)adcout*0.01427f);
 	
 	SP_StartMCU();
 	
-	SPIMonitor();
+//	SPIMonitor();
 	while(1);
 }
