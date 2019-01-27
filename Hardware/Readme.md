@@ -1,6 +1,6 @@
 # Hardware
 
-The experimental programmer hardware is based on an Arduino Nano with a ATMega168PA. 
+Experimental programmer hardware based on an Arduino Nano with a ATMega168PA. 
 
 The programming interface of the MCU is directly connected to GPIO of the ATMega as shown below. Also VDD is controlled by a GPIO. Maximum load on VDD is 20mA according to the PMS150C datasheet, which can be easily sourced from the ATMega. Vpp is generated with a simple boost converter.
 
