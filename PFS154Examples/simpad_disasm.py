@@ -21,12 +21,22 @@ for cursegment in ih.segments():
             print("goto\t${:04X}".format(dat&0x7ff))
         elif (dat&0x3800==0x3800):
             print("call\t${:04X}".format(dat&0x7ff))
+        elif (dat&0x3fff==0x006a):
+            print("sr\tA")
+        elif (dat&0x3fff==0x006b):
+            print("sl\tA")
+        elif (dat&0x3fff==0x007a):
+            print("ret")
+        elif (dat&0x3fff==0x007b):
+            print("reti")
         elif (dat&0x3fc0==0x00c0):
             print("xorio \t${:02X},A".format(dat&0x3f))
         elif (dat&0x3fc0==0x0180):
             print("movio \t${:02X},A".format(dat&0x3f))
         elif (dat&0x3fc0==0x01c0):
             print("movio \tA,${:02X}".format(dat&0x3f))
+        elif (dat&0x3f00==0x0200):
+            print("ret\t#${:02X}".format(dat&0xff))
         elif (dat&0x3f80==0x0e00):
             print("and\tA,${:02X}".format(dat&0x7f))
         elif (dat&0x3f80==0x0e80):
@@ -51,6 +61,8 @@ for cursegment in ih.segments():
             print("inc \t${:02X}".format(dat&0x7f))
         elif (dat&0x3f80==0x1280):
             print("dec \t${:02X}".format(dat&0x7f))
+        elif (dat&0x3f80==0x1300):
+            print("clear\t${:02X}".format(dat&0x7f))
         elif (dat&0x3f80==0x1500):
             print("sr \t${:02X}".format(dat&0x7f))
         elif (dat&0x3f80==0x1580):
@@ -59,6 +71,10 @@ for cursegment in ih.segments():
             print("src \t${:02X}".format(dat&0x7f))
         elif (dat&0x3f80==0x1680):
             print("slc \t${:02X}".format(dat&0x7f))
+        elif (dat&0x3f80==0x1700):
+            print("ceqsn\tA,${:02X}".format(dat&0x7f))
+        elif (dat&0x3f80==0x1780):
+            print("cneqsn\tA,${:02X}".format(dat&0x7f))
         elif (dat&0x3e00==0x1800):
             print("t0snio \t${:02X},#{:01X}".format(dat&0x3f,(dat>>6)&7))
         elif (dat&0x3e00==0x1a00):
@@ -87,10 +103,7 @@ for cursegment in ih.segments():
             print("xor \tA,#${:02X}".format(dat&0xff))
         elif (dat&0x3f00==0x2f00):
             print("mov \tA,#${:02X}".format(dat&0xff))
-        elif (dat&0x3fff==0x007a):
-            print("ret")
         elif (dat&0x3fff==0x0000):
             print("nop")
         else:
             print("????")
-

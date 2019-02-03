@@ -38,7 +38,7 @@
 static uint8_t cur_dutycycle=0;
 
 typedef enum {fivewire, sixwire,eightwire} physical_interface;
-
+/*
 // PMS150C
 static const physical_interface device_phy=sixwire;
 static const uint8_t device_datalen=13;
@@ -49,8 +49,8 @@ static const uint16_t device_vpp_erase=(uint16_t)(70.7*8.0);  // 8.0 V
 static const uint16_t device_memend=0x3ff;
 static const uint16_t device_id=0xa16;
 static const char device_string[]="PMS150C";
+*/
 
-/*
 // PFC154
 static const physical_interface device_phy=fivewire;
 static const uint8_t device_datalen=14;
@@ -61,8 +61,8 @@ static const uint16_t device_vpp_erase=(uint16_t)(70.7*8.0);  // 8.0 V
 static const uint16_t device_memend=0x7ff;
 static const uint16_t device_id=0xaa1;
 static const char device_string[]="PFS154";
-/*
 
+/*
 // PMS154C
 static const physical_interface device_phy=sixwire;
 static const uint8_t device_datalen=14;
@@ -502,10 +502,10 @@ int main(void)
 	}
 	SP_init();
 	_delay_ms(20);
-/*
+
 	printf("Erasing device...\n");
 	SP_EraseDevice();
-	*/
+	
 	printf("Writing to memory...\n");
 	SP_EnterPGMmode(0xA7);  // Enter write mode
 
@@ -516,17 +516,36 @@ int main(void)
 	adcout = ADC_0_get_conversion(6);
 	printf("Vpp write mode: %.1f V\tPWM: %i\n",(float)adcout*0.01427f,cur_dutycycle);
 
-	// led candle on PA.3 for PFS150c
-	SP_WriteWords(0x1702,0x0082,0x0000);
-	SP_WriteWords(0x1778,0x0083,0x0002);
-	SP_WriteWords(0x1701,0x0091,0x0004);
-	SP_WriteWords(0x0F10,0x1C0B,0x0006);
-	SP_WriteWords(0x0E10,0x1C0B,0x0008);
-	SP_WriteWords(0x1806,0x17FF,0x000A);
-	SP_WriteWords(0x05C0,0x05C1,0x000C);
-	SP_WriteWords(0x08C0,0x180E,0x000E);
-	SP_WriteWords(0x08C1,0x180E,0x0010);
-	SP_WriteWords(0x003A,0xFFFF,0x0012);
+	// blinkc for PFS154
+	SP_WriteWords(0x0000,0x1301,0x0000);
+	SP_WriteWords(0x2F00,0x2801,0x0002);
+	SP_WriteWords(0x006A,0x006B,0x0004);
+	SP_WriteWords(0x0182,0x381D,0x0006);
+	SP_WriteWords(0x3012,0xFFFF,0x0008);
+	SP_WriteWords(0x007B,0x3021,0x0010);
+	SP_WriteWords(0x2F00,0x0B80,0x0012);
+	SP_WriteWords(0x2F00,0x2800,0x0014);
+	SP_WriteWords(0x1780,0x301C,0x0016);
+	SP_WriteWords(0x2F00,0x0380,0x0018);
+	SP_WriteWords(0x1200,0x3014,0x001A);
+	SP_WriteWords(0x3011,0x2F78,0x001C);
+	SP_WriteWords(0x0183,0x0200,0x001E);
+	SP_WriteWords(0x007A,0x2F01,0x0020);
+	SP_WriteWords(0x0191,0x2F30,0x0022);
+	SP_WriteWords(0x0B80,0x2F75,0x0024);
+	SP_WriteWords(0x0B81,0x1280,0x0026);
+	SP_WriteWords(0x1081,0x0F80,0x0028);
+	SP_WriteWords(0x0E81,0x2A00,0x002A);
+	SP_WriteWords(0x3027,0x2F00,0x002C);
+	SP_WriteWords(0x0190,0x2F30,0x002E);
+	SP_WriteWords(0x0B80,0x2F75,0x0030);
+	SP_WriteWords(0x0B81,0x1280,0x0032);
+	SP_WriteWords(0x1081,0x0F80,0x0034);
+	SP_WriteWords(0x0E81,0x2A00,0x0036);
+	SP_WriteWords(0x3033,0x2F01,0x0038);
+	SP_WriteWords(0x0190,0x3023,0x003A);
+	SP_WriteWords(0x007A,0xFFFF,0x003C);
+
 
 /*
 	for (uint8_t i=0; i<0x60; i+=2) {

@@ -39,7 +39,7 @@ size:
 	@stat -L -c %s $(TARGET).bin
 
 cinclude: 
-	$(SPCONV) #>$(TARGET).h_txt
+	$(SPCONV) >$(TARGET).h_txt
 disasm:
 	$(SPDISAS)
 
