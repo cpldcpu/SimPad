@@ -22,9 +22,9 @@ for cursegment in ih.segments():
         elif (dat&0x3800==0x3800):
             print("call\t${:04X}".format(dat&0x7ff))
         elif (dat&0x3fff==0x006a):
-            print("sr\tA")
+            print("sr   \tA")
         elif (dat&0x3fff==0x006b):
-            print("sl\tA")
+            print("sl   \tA")
         elif (dat&0x3fff==0x007a):
             print("ret")
         elif (dat&0x3fff==0x007b):
@@ -36,13 +36,13 @@ for cursegment in ih.segments():
         elif (dat&0x3fc0==0x01c0):
             print("movio \tA,${:02X}".format(dat&0x3f))
         elif (dat&0x3f00==0x0200):
-            print("ret\t#${:02X}".format(dat&0xff))
+            print("ret \t#${:02X}".format(dat&0xff))
         elif (dat&0x3f80==0x0e00):
-            print("and\tA,${:02X}".format(dat&0x7f))
+            print("and \tA,${:02X}".format(dat&0x7f))
         elif (dat&0x3f80==0x0e80):
-            print("or\t$A,{:02X}".format(dat&0x7f))
+            print("or  \tA,${:02X}".format(dat&0x7f))
         elif (dat&0x3f80==0x0f00):
-            print("xor\t$A,{:02X}".format(dat&0x7f))
+            print("xor \tA,${:02X}".format(dat&0x7f))
         elif (dat&0x3f80==0x0f80):
             print("mov \tA,${:02X}".format(dat&0x7f))
         elif (dat&0x3f80==0x0B00):
@@ -88,9 +88,9 @@ for cursegment in ih.segments():
         elif (dat&0x3e00==0x2200):
             print("t1sn\t${:02X},#{:01X}".format(dat&0x3f,(dat>>6)&7))
         elif (dat&0x3f00==0x2800):
-            print("add\tA,#${:02X}".format(dat&0xff))
+            print("add \tA,#${:02X}".format(dat&0xff))
         elif (dat&0x3f00==0x2900):
-            print("sub\tA,#${:02X}".format(dat&0xff))
+            print("sub \tA,#${:02X}".format(dat&0xff))
         elif (dat&0x3f00==0x2a00):
             print("ceqsn\tA,#${:02X}".format(dat&0xff))
         elif (dat&0x3f00==0x2b00):
