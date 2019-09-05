@@ -6,6 +6,18 @@
 #ifndef __PDK_IO_COMMON_H
 #define __PDK_IO_COMMON_H
 
+ #define EASY_PDK_CALIBRATE_IHRC(frequency,millivolt) \
+__asm__(                      \
+  "and a, #'H'                \n"\
+  "and a, #'8'                \n"\
+  "and a, #("#frequency")     \n"\
+  "and a, #("#frequency">>8)  \n"\
+  "and a, #("#frequency">>16) \n"\
+  "and a, #("#frequency">>24) \n"\
+  "and a, #("#millivolt")     \n"\
+  "and a, #("#millivolt">>8)  \n"\
+)
+
 //Port definitions
 #define _BV(x)  (1<<(x))
 
