@@ -29,7 +29,7 @@ _putchar:
 	mov	    _uart_cntr, a
 sendloop:
 	sr	    _putchar_PARM_1
-	swapc	_pa,#7
+	swapc	_pa,#TXPIN
 	call	uartdelay
 
     dzsn	_uart_cntr
