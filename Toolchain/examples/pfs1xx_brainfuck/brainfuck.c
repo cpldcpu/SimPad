@@ -53,7 +53,7 @@ unsigned char _sdcc_external_startup(void)
 
 uint16_t findloopend(uint16_t codep) {
     uint16_t depth=0;
-    for (int16_t i=(int16_t)codep+1; i++; i<MAXCODESIZE) {
+    for (int16_t i=(int16_t)codep+1; i<MAXCODESIZE; i++) {
         switch (code[i]) {
             case '[': depth++; break;
             case ']': if (!depth--) return i; break;
@@ -65,7 +65,7 @@ uint16_t findloopend(uint16_t codep) {
 
 uint16_t findloopbegin(uint16_t codep) {
     uint16_t depth=0;
-    for (int16_t i=(int16_t)codep-1; i--; i>=0) {
+    for (int16_t i=(int16_t)codep-1; i>=0 ; i--) {
         switch (code[i]) {
             case '[': if (!depth--) return i; break;
             case ']': depth++; break;
