@@ -9,7 +9,3 @@ void delay_ms(uint16_t ms) {
 	}
 }
 
-// fix eakypdkprogrammer bug
-void uselesspadding(void) {
-    __asm__("nop");
-}
