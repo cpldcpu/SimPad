@@ -13,8 +13,16 @@
 #define LEDPIN PA4
 #define TXPIN PA7
 
-// extern void putchar(uint8_t);
-extern int putchar(int);
+extern void transmitchar(uint8_t);
+extern void print_uint8(uint8_t);
+extern void print_uint16(uint16_t);
+
+
+void print_string(const char *in)
+{
+    while (*in) transmitchar(*in++);
+}
+
 
 unsigned char _sdcc_external_startup(void)
 {
@@ -26,13 +34,14 @@ unsigned char _sdcc_external_startup(void)
 void main(void)
 {
  	pac |= _BV(LEDPIN);	    // Use this exact syntax to infer set0/set1
-	putchar(0x55);
+	transmitchar(0x55);
 	delay_ms(5);
 
+	uint16_t cnt=0;
  	for (;;) {
  		pa ^= _BV(LEDPIN);	// Toggle LED
-		puts("hallo");      // output textstring terminated with a newline. The current printf implementation is too large 
-		delay_ms(500);
+		print_uint16(cnt++);
+		print_string(" counts\n");     
+		delay_ms(200);
  	}
 }
-
