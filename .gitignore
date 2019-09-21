@@ -7,6 +7,22 @@
 *.obj
 *.elf
 
+#vscode
+.vscode
+
+# SDCC output
+*.lst
+*.asm
+*.ihx
+*.sym
+*.rst
+*.lk
+*.rel
+*.cdb
+*.bin
+
+
+
 # Linker output
 *.ilk
 *.map
