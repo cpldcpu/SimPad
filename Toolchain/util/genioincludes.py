@@ -52,11 +52,21 @@ for idx, mcu in enumerate(headings):
             outfile.write("#define __PDK_FLASHEND {0}\n".format(flashend))
 
         outfile.write("\n")
-        if ihrccal>0: 
-            outfile.write("#define __PDK_IHRCCAL *((const unsigned char*)({0}))\n".format(ihrccal))
-        outfile.write("\n")
+        # if ihrccal>0: 
+        #     outfile.write("#define __PDK_IHRCCAL *((const unsigned char*)({0}))\n".format(ihrccal))
+        # outfile.write("\n")
         if sfr16: 
             outfile.write("__sfr16\t{0};\n".format(sfr16))
+
+        for reg in range(0,ioend+1):
+            if reg%8 == 0:
+                outfile.write("\n")
+            try:
+                val=datadict[reg][idx]
+            except KeyError:
+                val=''            
+            if len(val)>0:
+                outfile.write("#define {1:8}\t{2} // __sfr __at(0x{0:02x}) {1}\n".format(reg,val.upper(),val.lower()))
 
         for reg in range(0,ioend+1):
             if reg%8 == 0:
