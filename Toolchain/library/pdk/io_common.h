@@ -6,11 +6,11 @@
 #ifndef __PDK_IO_COMMON_H
 #define __PDK_IO_COMMON_H
 
-/*
- Generate code with auto calibration. Make sure your programmer supports it.
+/* Generate code with for calibration. Make sure your programmer supports it.
 */
 
- #define EASY_PDK_CALIBRATE_IHRC(frequency,millivolt) \
+#define EASY_PDK_CALIBRATE_IHRC(frequency,millivolt) EASY_PDK_CALIBRATE_IHRCx(frequency,millivolt)
+#define EASY_PDK_CALIBRATE_IHRCx(frequency,millivolt) \
 __asm__(                      \
   "and a, #'H'                \n"\
   "and a, #'8'                \n"\
@@ -22,7 +22,7 @@ __asm__(                      \
   "and a, #("#millivolt">>8)  \n"\
 )
 
-//concatenate _ for assembler sections
+// concatenate underscore for assembler sections
 
 #define sl(x) _ ## x
 #define s(y) sl(y)
