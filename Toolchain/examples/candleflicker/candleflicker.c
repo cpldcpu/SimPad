@@ -11,14 +11,32 @@
 #include <stdint.h>
 #include <pdk/io_pfs154.h>
 
+// #define candledebug
+
+#ifdef candledebug 
+// UART configuration 
+#define TXPORT pa
+#define TXPORTC pac
+#define TXPIN 7
+#define BAUDRATE 38400
+
+#include "PDK_softuart.c"	// include softuart implementation
+
+#endif
+
 #define LEDPIN PA4
 
-volatile unsigned int rnd_lfsr;
+volatile uint16_t rnd_lfsr;
+volatile uint16_t lowpass;
 
 unsigned char _sdcc_external_startup(void)
 {
 	CLKMD = CLKMD_IHRC_DIV16 | CLKMD_ENABLE_IHRC; // 1 Mhz main clock
 	EASY_PDK_CALIBRATE_IHRC(F_CPU, 5000);		 // tune SYSCLK to 1.0MHz @ 5.00V
+
+#ifdef candledebug 
+	PDK_autobaud();
+#endif
 	return 0;
 }
 
@@ -43,20 +61,35 @@ void candle_init()
 	PWMG1CUBH = 0xff;
 
 	rnd_lfsr = 0x55ce;
+	lowpass = 0;
 }
 
 void candle_do()
 {
+	uint16_t newval;
 	if (rnd_lfsr & 0x100)
 	{
-		PWMG1DTH = 255;
+		newval = 255;
 	}
 	else
 	{
-		PWMG1DTH = (uint8_t)(rnd_lfsr & 255);
+		newval = (uint8_t)(rnd_lfsr & 255);
 	}
 
-	for (char i = 0; i < 7; i++)
+	// lowpass = newval<<8;   // no filter
+	lowpass = lowpass - (lowpass>>1) + (newval<<7);   // IIR filter with lag 2 (recommended)
+	// lowpass = lowpass - (lowpass>>2) + (newval<<6);   // IIR filter with lag 4 (less flicker)
+	// lowpass = lowpass - (lowpass>>3) + (newval<<5);   // IIR filter with lag 8 (even less flicker)
+
+#ifdef candledebug 
+	PDK_sendchar('\n');
+	PDK_senduint16(lowpass);
+#endif
+
+	PWMG1DTL = lowpass&255;
+	PWMG1DTH = lowpass>>8;
+
+	for (char i = 0; i < 3; i++)
 	{
 		lfsr_step();
 		if ((rnd_lfsr & 0xff) > 128)
