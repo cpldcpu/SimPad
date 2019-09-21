@@ -16,7 +16,7 @@
 
 volatile uint8_t uart_cntr;
 volatile uint8_t loopctr1,loopctr2;
-volatile uint8_t print_tmp[5];
+volatile uint8_t print_tmp[6];
 
 void    PDK_sendchar(uint8_t out) {
     out;
