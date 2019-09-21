@@ -5,7 +5,7 @@
 
 #ifndef F_CPU
 #   warning "F_CPU not defined, using 8MHz by default"
-#   define F_CPU 8000000UL
+#   define F_CPU 8000000
 #endif
 
 extern void delay_ms(uint16_t delay);
