@@ -1,13 +1,18 @@
+/*
+	PDK software uart
+	Size optimized soft UART functions to support printf style debuggin on Padauk MCUS.
+
+	void PDK_autobaud(void);       // autobaud for the easypdkprogrammer. This needs to be called before sending anything on the UART
+	void PDK_sendchar(uint8_t);    // Send a single char on the serial port. So far, no receving is possible.
+	void PDK_sendstring(char *);   // Sends a zero terminated string that can reside in RAM or ROM
+	void PDK_senduint16(uint16_t); // Prints a decimal representation of a 16 bit unsigned value on the UART.
+
+	September 20, 2019 cpldcpu - first version
+*/
 
 #include <pdk/softuart.h>
 #include <pdk/io_pfs154.h>
 #include <stdint.h>
-
-#define TXPORT pa
-#define TXPORTC pac
-
-#define TXPIN 7
-#define BAUDRATE 38400
 
 volatile uint8_t uart_cntr;
 volatile uint8_t loopctr1,loopctr2;
@@ -43,6 +48,19 @@ uartdelay:
     //	ret   
 __endasm;
     
+}
+
+void PDK_autobaud(void) {
+
+__asm
+	mov 	a,#0x55
+	mov 	_PDK_sendchar_PARM_1,a
+	call	_PDK_sendchar
+	call    uartdelay
+	call    uartdelay
+	call    uartdelay
+	call    uartdelay
+__endasm;
 }
 
 void PDK_sendstring(char *in)
@@ -137,7 +155,7 @@ print_uint16_outloop$:
 
 digitout:
 	add		a, #0x30
-	mov		_transmitchar_PARM_1+0, a
+	mov		_PDK_sendchar_PARM_1+0, a
 	mov		_print_tmp+5,a 			; Dont skip further zeros
 	goto	_transmitchar			; Uses ret from transmitchar
 __endasm;
