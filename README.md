@@ -15,9 +15,8 @@ Firmware, very incomplete work in progress. Is currently able to program PMS150C
 
 Information on programming protocol
 
-### [PFS154Blinky](PFS154Blinky/)
+### [Toolchain](Toolchain/)
 
-Blinky-project, to be compiled with SDCC.
-
+Toolchain based on EASYPDKPROG and SDCC. Includes a few examples.
 
 ![Image of breadboard](hardware.jpg)
