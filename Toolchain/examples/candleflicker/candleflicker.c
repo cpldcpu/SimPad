@@ -53,10 +53,10 @@ void candle_do()
 	}
 	else
 	{
-		PWMG1DTH = (unsigned char)(rnd_lfsr & 255);
+		PWMG1DTH = (uint8_t)(rnd_lfsr & 255);
 	}
 
-	for (char i = 0; i < 3; i++)
+	for (char i = 0; i < 7; i++)
 	{
 		lfsr_step();
 		if ((rnd_lfsr & 0xff) > 128)
