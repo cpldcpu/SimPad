@@ -10,3 +10,5 @@ Right now the following calls are supported
   - ```void PDK_senduint16(uint16_t)``` Prints a decimal representation of a 16 bit unsigned value on the UART.
 
 No serial receive functionality is provided as of now.
+
+The implementation of the softuart can be found [here](../../library/PDK_softuart.c).
