@@ -153,14 +153,24 @@ __asm__(                      \
  #define TM2S_PRESCALE_DIV64          0x60
 
 //gpcc definitions
- #define GPCC_COMP_PLUS_VINT          0x00
+ #define GPCC_COMP_PLUS_VINT_R        0x00
  #define GPCC_COMP_PLUS_PA4           0x01
  #define GPCC_COMP_MINUS_PA3          0x00
  #define GPCC_COMP_MINUS_PA4          0x02
- #define GPCC_COMP_MINUS_BANDGAP_1V2  0x04
+ #define GPCC_COMP_MINUS_BANDGAP      0x04
  #define GPCC_COMP_MINUS_VINT_R       0x06
+ #define GPCC_COMP_ENABLE             0x80
+ #define GPCC_COMP_RESULT             0x40
+ #define GPCC_COMP_SYNC_TM2           0x20
+ #define GPCC_COMP_INVERSE            0x10
+
+#if defined __SDCC_pdk13
  #define GPCC_COMP_MINUS_PA6          0x08
  #define GPCC_COMP_MINUS_PA7          0x0A
+#else
+ #define GPCC_COMP_MINUS_PB6          0x08
+ #define GPCC_COMP_MINUS_PB7          0x0A
+#endif
 
 //gpcs definitions
  #define GPCS_COMP_CASE1              0x00
