@@ -16,7 +16,7 @@
 
 volatile uint8_t uart_cntr;
 volatile uint8_t loopctr1,loopctr2;
-volatile uint8_t print_tmp[6];
+volatile uint8_t print_tmp[12];
 
 void    PDK_sendchar(uint8_t out) {
     out;
@@ -93,25 +93,31 @@ __endasm;
 // -------------------------------------------------------
 
 void PDK_senduint16(uint16_t in) {
+	PDK_senduint32((uint32_t) in);
+}
+
+void PDK_senduint32(uint32_t in) {
 
     in;
 
 __asm   
-	clear 	_print_tmp+5	;store value >10 here to display leading zeroes
+	clear 	_print_tmp+11	;store value >10 here to display leading zeroes
 
-	mov 	a,#16
+	mov 	a,#32
 	mov		_loopctr1,a
 	; mov		_print_tmp+5,a
 print_uint16_loop$:
-	sl  	_PDK_senduint16_PARM_1+0
-	slc  	_PDK_senduint16_PARM_1+1
+	sl  	_PDK_senduint32_PARM_1+0
+	slc  	_PDK_senduint32_PARM_1+1
+	slc  	_PDK_senduint32_PARM_1+2
+	slc  	_PDK_senduint32_PARM_1+3
 	pushaf			; save carry flag
 
 	mov		a, #(_print_tmp)
 	mov		p, a
 	clear	p+1
 
-	mov		a, #5
+	mov		a, #10
 	mov		_loopctr2,a
 
 print_uint16_innerloop$:
@@ -133,12 +139,12 @@ print_uint16_innerloop$:
 	dzsn 	_loopctr1
 	goto 	print_uint16_loop$
 
-	mov 	a,#5					; Iterate also though last element, which is used as a flag. p points to last element
+	mov 	a,#10					; Iterate also though last element, which is used as a flag. p points to last element
 	mov		_loopctr1,a
 
 print_uint16_outloop$:
 	idxm	a, p
-	ceqsn	a, _print_tmp+5   		; skip leading zeros. Also skip last element in array
+	ceqsn	a, _print_tmp+11   		; skip leading zeros. Also skip last element in array
 	call	digitout
 
 	dec		p
@@ -151,7 +157,7 @@ print_uint16_outloop$:
 digitout:
 	add		a, #0x30
 	mov		_PDK_sendchar_PARM_1+0, a
-	mov		_print_tmp+5,a 			; Dont skip further zeros
+	mov		_print_tmp+11,a 			; Dont skip further zeros
 	call	_transmitchar			; Uses ret from transmitchar
 	idxm	p, a 					; delete printed digits to erase buffer. Nonprinted digits are already zero.
 __endasm;
