@@ -97,11 +97,6 @@ void PDK_senduint16(uint16_t in) {
     in;
 
 __asm   
-	clear 	_print_tmp+0
-	clear 	_print_tmp+1
-	clear 	_print_tmp+2
-	clear 	_print_tmp+3
-	clear 	_print_tmp+4
 	clear 	_print_tmp+5	;store value >10 here to display leading zeroes
 
 	mov 	a,#16
@@ -157,7 +152,8 @@ digitout:
 	add		a, #0x30
 	mov		_PDK_sendchar_PARM_1+0, a
 	mov		_print_tmp+5,a 			; Dont skip further zeros
-	goto	_transmitchar			; Uses ret from transmitchar
+	call	_transmitchar			; Uses ret from transmitchar
+	idxm	p, a 					; delete printed digits to erase buffer. Nonprinted digits are already zero.
 __endasm;
 }
 
