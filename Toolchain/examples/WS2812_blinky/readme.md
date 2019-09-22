@@ -4,7 +4,7 @@ A small bitbanging routines to support writing to WS2812 and similar RGB-LEDS wi
 
 The following calls are supported:
 
-  - ```void PDK_WS2812_writebyte(uint8_t)``` Sends a single byte to the WS2812 string. Each LED needs 3 (RGB) or 4 (RGBW) bytes. 
+  - ```void PDK_WS2812_writebyte(uint8_t)``` Sends one byte to the WS2812 string. Each LED needs 3 (RGB) or 4 (RGBW) bytes. 
   - ```void PDK_WS_writeRGB(r,g,b)``` Send a RGB triple to the WS2812 string.
   - ```void PDK_WS_writeRGBW(r,g,b,w)``` Send a RGBW quadruple to the WS2812 string.
 
