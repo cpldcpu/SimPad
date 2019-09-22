@@ -11,4 +11,4 @@ Right now the following calls are supported
 
 No serial receive functionality is provided as of now.
 
-The implementation can be found [here](../../library/PDK_softuart.c).
+The implementation of the softuart can be found [here](../../library/PDK_softuart.c).
