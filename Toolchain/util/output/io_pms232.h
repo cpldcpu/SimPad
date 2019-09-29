@@ -1,6 +1,6 @@
 // I/O include file for Padauk PMS232
-// Version: 0.1a
-// Automatically generated on 2019-09-21 11:25:32.764151
+// Version: 0.11a
+// Automatically generated on 2019-09-29 16:10:55.836291
 
 #ifndef __PDK_IO_PMS232_H
 #define __PDK_IO_PMS232_H
@@ -9,6 +9,7 @@
 
 #define __PDK_IOEND 127
 
+#define PDK_USE_FACTORY_TRIMMING() {#error 'this device does not support factory trimming'}
 
 #define FLAG    	flag // __sfr __at(0x00) FLAG
 #define FPPEN   	fppen // __sfr __at(0x01) FPPEN
@@ -18,7 +19,6 @@
 #define INTRQ   	intrq // __sfr __at(0x05) INTRQ
 #define T16M    	t16m // __sfr __at(0x06) T16M
 #define GDIO    	gdio // __sfr __at(0x07) GDIO
-
 #define TM2B    	tm2b // __sfr __at(0x09) TM2B
 #define EOSCR   	eoscr // __sfr __at(0x0a) EOSCR
 #define IHRCR   	ihrcr // __sfr __at(0x0b) IHRCR
@@ -26,7 +26,6 @@
 #define PADIER  	padier // __sfr __at(0x0d) PADIER
 #define PBDIER  	pbdier // __sfr __at(0x0e) PBDIER
 #define (PCDIER)	(pcdier) // __sfr __at(0x0f) (PCDIER)
-
 #define PA      	pa // __sfr __at(0x10) PA
 #define PAC     	pac // __sfr __at(0x11) PAC
 #define PAPH    	paph // __sfr __at(0x12) PAPH
@@ -34,28 +33,15 @@
 #define PBC     	pbc // __sfr __at(0x15) PBC
 #define PBPH    	pbph // __sfr __at(0x16) PBPH
 #define PC      	pc // __sfr __at(0x17) PC
-
 #define PCC     	pcc // __sfr __at(0x18) PCC
 #define PCPH    	pcph // __sfr __at(0x19) PCPH
-
 #define RSTST   	rstst // __sfr __at(0x25) RSTST
-
-
 #define TM2S    	tm2s // __sfr __at(0x37) TM2S
-
 #define A_IHRC  	a_ihrc // __sfr __at(0x38) A_IHRC
 #define BGTR    	bgtr // __sfr __at(0x39) BGTR
 #define MISC    	misc // __sfr __at(0x3b) MISC
 #define TM2C    	tm2c // __sfr __at(0x3c) TM2C
 #define TM2CT   	tm2ct // __sfr __at(0x3d) TM2CT
-
-
-
-
-
-
-
-
 
 __sfr __at(0x00)	flag;
 __sfr __at(0x01)	fppen;

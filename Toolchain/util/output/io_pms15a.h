@@ -1,6 +1,6 @@
 // I/O include file for Padauk PMS15A
-// Version: 0.1a
-// Automatically generated on 2019-09-21 11:25:32.733845
+// Version: 0.11a
+// Automatically generated on 2019-09-29 16:10:55.799258
 
 #ifndef __PDK_IO_PMS15A_H
 #define __PDK_IO_PMS15A_H
@@ -9,6 +9,7 @@
 
 #define __PDK_IOEND 31
 
+#define PDK_USE_FACTORY_TRIMMING() {#error 'this device does not support factory trimming'}
 
 #define FLAG    	flag // __sfr __at(0x00) FLAG
 #define SP      	sp // __sfr __at(0x02) SP
@@ -16,18 +17,15 @@
 #define INTEN   	inten // __sfr __at(0x04) INTEN
 #define INTRQ   	intrq // __sfr __at(0x05) INTRQ
 #define T16M    	t16m // __sfr __at(0x06) T16M
-
 #define TM2B    	tm2b // __sfr __at(0x09) TM2B
 #define EOSCR   	eoscr // __sfr __at(0x0a) EOSCR
 #define IHRCR   	ihrcr // __sfr __at(0x0b) IHRCR
 #define INTEGS  	integs // __sfr __at(0x0c) INTEGS
 #define PADIER  	padier // __sfr __at(0x0d) PADIER
-
 #define PA      	pa // __sfr __at(0x10) PA
 #define PAC     	pac // __sfr __at(0x11) PAC
 #define PAPH    	paph // __sfr __at(0x12) PAPH
 #define TM2S    	tm2s // __sfr __at(0x17) TM2S
-
 #define BGTR    	bgtr // __sfr __at(0x19) BGTR
 #define GPCC    	gpcc // __sfr __at(0x1a) GPCC
 #define MISC    	misc // __sfr __at(0x1b) MISC
