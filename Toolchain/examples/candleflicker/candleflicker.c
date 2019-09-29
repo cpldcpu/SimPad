@@ -32,8 +32,7 @@ volatile uint16_t lowpass;
 unsigned char _sdcc_external_startup(void)
 {
 	CLKMD = CLKMD_IHRC_DIV16 | CLKMD_ENABLE_IHRC; // 1 Mhz main clock
-	EASY_PDK_CALIBRATE_IHRC(F_CPU, 5000);		 // tune SYSCLK to 1.0MHz @ 5.00V
-
+	PDK_USE_FACTORY_TRIMMING();
 #ifdef candledebug 
 	PDK_autobaud();
 #endif
