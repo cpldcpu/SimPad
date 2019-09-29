@@ -7,8 +7,8 @@
 
    The follow #defines need to be present before this source is included:
 
-   WS2812_PORT  - Port regiser (pa,pb,pc)
-   WS2812_PORTC - Port controler regiser (pac,pbc,pcc)
+   WS2812_PORT  - Port register (pa,pb,pc)
+   WS2812_PORTC - Port controler register (pac,pbc,pcc)
    WS2812_PIN   - Pin on port (0-7)
     
    Sep 22, 2019 cpldcpu - first release
@@ -37,7 +37,7 @@ __asm
 	mov     a,#8
 10$:
 	set1 	s(WS2812_PORT),#(WS2812_PIN)   ;0
-	sl		_PDK_WS2812_writebyte_PARM_1+0     ;1
+	sl      _PDK_WS2812_writebyte_PARM_1+0     ;1
 	nop 								   ;2
 	swapc	s(WS2812_PORT),#(WS2812_PIN)   ;3
 	nop 								   ;4
@@ -52,7 +52,7 @@ __asm
 	set1 	s(WS2812_PORTC),#(WS2812_PIN)
 	mov     a,#8
 10$:
-	sl		_PDK_WS2812_writebyte_PARM_1+0     ;0
+	sl      _PDK_WS2812_writebyte_PARM_1+0     ;0
 	set1 	s(WS2812_PORT),#(WS2812_PIN)   ;1
 	swapc	s(WS2812_PORT),#(WS2812_PIN)   ;2
 	set0 	s(WS2812_PORT),#(WS2812_PIN)   ;3	
