@@ -26,7 +26,7 @@ Sep 21, 2019 cpldcpu - first release
 unsigned char _sdcc_external_startup(void)
 {
 	CLKMD = CLKMD_IHRC_DIV2|CLKMD_ENABLE_IHRC;  // 8 Mhz main clock
-	EASY_PDK_CALIBRATE_IHRC(8000000,5000);      // tune SYSCLK to 8.0MHz @ 5.00V
+	PDK_USE_FACTORY_TRIMMING();
 	return 0; 
 }
 
