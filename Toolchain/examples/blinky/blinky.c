@@ -16,6 +16,8 @@
 unsigned char _sdcc_external_startup(void)
 {
 	CLKMD = CLKMD_IHRC_DIV2|CLKMD_ENABLE_IHRC;  // 8 Mhz main clock
+	PDK_USE_FACTORY_TRIMMING();
+
 	return 0; // perform normal initialization
 }
 
