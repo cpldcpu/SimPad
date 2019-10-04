@@ -9,8 +9,10 @@
 /* Generate code with for calibration. Make sure your programmer supports it.
 */
 
-#define EASY_PDK_CALIBRATE_IHRC(frequency,millivolt) EASY_PDK_CALIBRATE_IHRCx(frequency,millivolt)
-#define EASY_PDK_CALIBRATE_IHRCx(frequency,millivolt) \
+//#define EASY_PDK_CALIBRATE_IHRC(frequency,millivolt) EASY_PDK_CALIBRATE_IHRC_H8(frequency,millivolt)
+#define EASY_PDK_CALIBRATE_IHRC(frequency,millivolt) EASY_PDK_CALIBRATE_IHRC_H9(frequency,millivolt)
+
+#define EASY_PDK_CALIBRATE_IHRC_H8(frequency,millivolt) \
 __asm__(                      \
   "and a, #'H'                \n"\
   "and a, #'8'                \n"\
@@ -20,6 +22,19 @@ __asm__(                      \
   "and a, #("#frequency">>24) \n"\
   "and a, #("#millivolt")     \n"\
   "and a, #("#millivolt">>8)  \n"\
+)
+
+#define EASY_PDK_CALIBRATE_IHRC_H9(frequency,millivolt) \
+__asm__(                      \
+  "and a, #'H'                \n"\
+  "and a, #'9'                \n"\
+  "and a, #("#frequency")     \n"\
+  "and a, #("#frequency">>8)  \n"\
+  "and a, #("#frequency">>16) \n"\
+  "and a, #("#frequency">>24) \n"\
+  "and a, #("#millivolt")     \n"\
+  "and a, #("#millivolt">>8)  \n"\
+  "and a, #0                  \n"\
 )
 
 // concatenate underscore for assembler sections
@@ -49,30 +64,42 @@ __asm__(                      \
 #define PB7 7
 
 //clkmd definitions
- #define CLKMD_ENABLE_PA5RST          0x01
- #define CLKMD_ENABLE_WATCHDOG        0x02
- #define CLKMD_ENABLE_ILRC            0x04
- #define CLKMD_ENABLE_IHRC            0x10
- #define CLKMD_IHRC_DIV2              0x20
- #define CLKMD_IHRC_DIV4              0x00
- #define CLKMD_IHRC_DIV8              0x28
- #define CLKMD_IHRC_DIV16             0x08
- #define CLKMD_IHRC_DIV32             0x68
- #define CLKMD_IHRC_DIV64             0x88
- #define CLKMD_ILRC                   0xe0
- #define CLKMD_ILRC_DIV4              0xc0
+#define CLKMD_ENABLE_PA5RST          0x01
+#define CLKMD_ENABLE_WATCHDOG        0x02
+#define CLKMD_ENABLE_ILRC            0x04
+#define CLKMD_ENABLE_IHRC            0x10
+#define CLKMD_IHRC_DIV2              0x20
+#define CLKMD_IHRC_DIV4              0x00
+#define CLKMD_IHRC_DIV8              0x28
+#define CLKMD_IHRC_DIV16             0x08
+#define CLKMD_IHRC_DIV32             0x68
+#define CLKMD_IHRC_DIV64             0x88
+#define CLKMD_ILRC                   0xe0
+#define CLKMD_ILRC_DIV4              0xc0
 
 //interrupt enable definitions
- #define INTEN_PA0                    0x01
- #define INTEN_T16                    0x04
- #define INTEN_COMP                   0x10
- #define INTEN_TM2                    0x40
+#define INTEN_PA0                    0x01
+#define INTEN_PB5                    0x01
+#define INTEN_PB0                    0x02
+#define INTEN_PA4                    0x02
+#define INTEN_T16                    0x04
+#define INTEN_ADC                    0x08
+#define INTEN_COMP                   0x10
+#define INTEN_PWMG                   0x20
+#define INTEN_TM2                    0x40
+#define INTEN_TM3                    0x80
 
 //interrupt request definitions
  #define INTRQ_PA0                    0x01
+ #define INTRQ_PB5                    0x01
+ #define INTRQ_PB0                    0x02
+ #define INTRQ_PA4                    0x02
  #define INTRQ_T16                    0x04
+ #define INTRQ_ADC                    0x08
  #define INTRQ_COMP                   0x10
+ #define INTRQ_PWMG                   0x20
  #define INTRQ_TM2                    0x40
+ #define INTRQ_TM3                    0x80
 
 //tm16 definitions
  #define T16_INTSRC_8BIT              0x00
@@ -179,5 +206,38 @@ __asm__(                      \
  #define GPCS_COMP_CASE4              0x30
  #define GPCS_COMP_WAKEUP_ENABLE      0x40
  #define GPCS_COMP_OUTPUT_PA0         0x80
+
+//adcc definitions
+#define ADCC_ADC_ENABLE              0x80
+#define ADCC_ADC_CONV_START          0x40
+#define ADCC_ADC_CONV_COMPLETE       0x40
+#define ADCC_CH_AD0_PB0              0x00
+#define ADCC_CH_AD1_PB1              0x04
+#define ADCC_CH_AD2_PB2              0x08
+#define ADCC_CH_AD3_PB3              0x0C
+#define ADCC_CH_AD4_PB4              0x10
+#define ADCC_CH_AD5_PB5              0x14
+#define ADCC_CH_AD6_PB6              0x18
+#define ADCC_CH_AD7_PB7              0x1C
+#define ADCC_CH_AD8_PA3              0x20
+#define ADCC_CH_AD9_PA4              0x24
+#define ADCC_CH_AD10_PA0             0x28
+#define ADCC_CH_AD11_PC1             0x2C
+#define ADCC_CH_AD12_PC2             0x30
+#define ADCC_CH_AD16_BANDGAP         0x3C
+
+//adcm definitions
+#define ADCM_CLK_SYSCLK              0x00
+#define ADCM_CLK_SYSCLK_DIV2         0x02
+#define ADCM_CLK_SYSCLK_DIV4         0x04
+#define ADCM_CLK_SYSCLK_DIV8         0x06
+#define ADCM_CLK_SYSCLK_DIV16        0x08
+#define ADCM_CLK_SYSCLK_DIV32        0x0A
+#define ADCM_CLK_SYSCLK_DIV64        0x0C
+#define ADCM_CLK_SYSCLK_DIV128       0x0E
+
+//adcrgc definitions
+#define ADCRG_ADC_REF_VDD            0x00
+#define ADCRG_ADC_REF_PB1            0x80
 
  #endif
