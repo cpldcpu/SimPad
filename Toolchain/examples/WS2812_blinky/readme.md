@@ -1,6 +1,6 @@
 # Example using the PDK_WS2812 support for RGB LEDs.
 
-A small bitbanging routines to support writing to WS2812 and similar RGB-LEDS with integrated controller. Only 4 MHz and 8 MHz CPU clock is allowed.
+A small bitbanging routine to support writing to WS2812 and similar RGB-LEDS with integrated controller. Only 4 MHz and 8 MHz CPU clock is allowed.
 
 The following calls are supported:
 
@@ -13,3 +13,5 @@ Please note that the WS2812 will automatically update their RGB value after the 
 The implementation can be found [here](../../library/PDK_WS2812.c).
 
 In cases of issues, please take a look at the readme of the WS2812_light library [here](https://github.com/cpldcpu/light_ws2812).
+
+**Note**: This example does not work on PFS173 (PDK15) right now due to a bug in SDCC/SDAS that does not assemble SWAPC correctly. PFS154 (PDK14) works fine, though.
