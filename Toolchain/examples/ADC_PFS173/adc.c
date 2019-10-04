@@ -53,8 +53,8 @@ void main(void)
 
 		uint8_t adcout=ADCR;
 
+		PDK_sendchar('\n');
 		PDK_senduint16(adcout);
-		PDK_sendstring('\n');
 		delay_ms(200);
 
  	}
