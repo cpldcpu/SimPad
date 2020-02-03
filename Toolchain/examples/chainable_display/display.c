@@ -21,7 +21,7 @@ uint8_t state;  // S0=forward  S1= Receive
 
 #define	S_forward	0
 #define S_receive 	1
-#define	Endmarker	0x00	// CR  -> Code should not be 0xff to avoid glitches causing updates
+#define	Endmarker	0x00	// -> Code should not be 0xff to avoid glitches causing updates
 
 uint8_t datareg;
 uint8_t forwardreg;
@@ -60,14 +60,10 @@ unsigned char _sdcc_external_startup(void)
 
 void main(void)
 {
-
-	// T16M = T16_CLK_DIV16 | T16_CLK_SYSCLK | T16_INTSRC_11BIT; // 1 MHZ / 16 / (2^11) = 30 Hz
 	INTEN  =INTEN_PA0;
 	INTEGS =INTEGS_PA0_FALLING;
 	PADIER|=PADIE_PA0_WAKEUP_ENABLE;	
 	INTRQ = 0; 
-
-	__asm__("engint"); // enable interrupts
 
 	PBC=0x7F;		
 	PB=0x7f^0x40;  // Display hyphen '-' after reset
@@ -75,6 +71,9 @@ void main(void)
 	PAC|=_BV(Dout);
 	forwardreg=255;
 	state = S_receive;
+
+	__asm__("engint"); // enable interrupts
+
 	for (;;)
 	{
 		if ((forwardreg==Endmarker)&&(state==S_forward)) {	// received end marker while in forwarding mode -> update condition met
@@ -193,10 +192,10 @@ h_5$:
 
 	mov 	a,#(Endmarker)
 	ceqsn 	a,_datareg		// Check if end-marker was received instead of data. If yes, stay in receive mode.
-	clear 	_state			// switch to forward
+	clear 	_state			// switch to forward mode
 h_glitch:
 h_exit:
 __endasm;
 
-	INTRQ=0;  // only using one interrupt
+	INTRQ=0;  // Clear all interrupts - ok, since only one interrupt is used.
 }
