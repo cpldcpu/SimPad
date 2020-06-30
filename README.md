@@ -5,7 +5,9 @@ Various hacks for Padauk MCU, the infamous "0.03USD" microcontroller. This is wo
 
 ### [Hardware](Hardware/)
 
-Programmer for Padauk MCU based on Arduino Nano, currently living on a breadbord. See folder for a description of shortcomings.
+Experimental programmer for Padauk MCU based on Arduino Nano, currently living on a breadbord. Not ready for production use, but can maybe serve es a reference. See folder for a description of shortcomings.
+
+If you are in need of a programmer for the Padauk MCU, please check out the [EasyPDKProg](https://github.com/free-pdk/easy-pdk-programmer-hardware).
 
 ### [Firmware](Firmware/)
 
